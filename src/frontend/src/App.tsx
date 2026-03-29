@@ -872,7 +872,10 @@ function CalendarPanel({
     : null;
 
   return (
-    <div className="panel-enter">
+    <div
+      className="panel-enter"
+      style={{ width: "100%", overflowX: "hidden", boxSizing: "border-box" }}
+    >
       <div
         style={{
           display: "flex",
@@ -978,11 +981,15 @@ function CalendarPanel({
 
       {/* Days of week */}
       <div
+        className="cal-grid-mobile"
         style={{
           display: "grid",
           gridTemplateColumns: "repeat(7,1fr)",
           gap: "3px",
           marginBottom: "3px",
+          width: "100%",
+          boxSizing: "border-box",
+          overflowX: "hidden",
         }}
       >
         {["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"].map((d) => (
@@ -1003,10 +1010,14 @@ function CalendarPanel({
 
       {/* Calendar grid */}
       <div
+        className="cal-grid-mobile"
         style={{
           display: "grid",
           gridTemplateColumns: "repeat(7,1fr)",
           gap: "3px",
+          width: "100%",
+          boxSizing: "border-box",
+          overflowX: "hidden",
         }}
       >
         {Array.from({ length: firstDay }, (_, idx) => `empty-cal-${idx}`).map(
@@ -1040,7 +1051,12 @@ function CalendarPanel({
                 onClick={() =>
                   setSelectedDate(dateStr === selectedDate ? null : dateStr)
                 }
-                style={{ textAlign: "left", width: "100%" }}
+                style={{
+                  textAlign: "left",
+                  width: "100%",
+                  overflow: "hidden",
+                  boxSizing: "border-box",
+                }}
               >
                 {hasTest ? (
                   <div
@@ -2681,7 +2697,14 @@ export default function App() {
   }
 
   return (
-    <div style={{ position: "relative", zIndex: 1 }}>
+    <div
+      style={{
+        position: "relative",
+        zIndex: 1,
+        width: "100%",
+        boxSizing: "border-box" as const,
+      }}
+    >
       {/* HEADER */}
       <header
         style={{
@@ -2699,75 +2722,91 @@ export default function App() {
             maxWidth: "1400px",
             margin: "0 auto",
             display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            minHeight: "64px",
-            gap: "16px",
-            flexWrap: "wrap",
+            flexDirection: "column",
+            gap: "6px",
             padding: "8px 0",
           }}
         >
-          <div>
-            <div
-              className="font-bebas"
-              style={{
-                fontSize: "clamp(16px,2.5vw,22px)",
-                letterSpacing: "2px",
-                lineHeight: 1.1,
-              }}
-            >
-              KARAN <span style={{ color: "var(--accent2)" }}>PRABHAT</span> —
-              THE GATE ASPIRANT’S TRACKER
-            </div>
-            <div
-              style={{
-                fontSize: "12px",
-                color: "var(--gold)",
-                letterSpacing: "3px",
-                marginTop: "2px",
-                display: "flex",
-                alignItems: "center",
-                gap: "6px",
-              }}
-            >
-              <span style={{ fontSize: "8px" }}>◆</span> TARGET : IITB / IISc
-            </div>
-          </div>
-
-          {/* Desktop nav */}
-          <nav
+          {/* Row 1: title + theme toggle */}
+          <div
             style={{
               display: "flex",
-              gap: "2px",
-              background: "var(--bg3)",
-              padding: "4px",
-              borderRadius: "10px",
-              border: "1px solid var(--border)",
+              alignItems: "center",
+              justifyContent: "space-between",
             }}
           >
-            {PANELS.map((p) => (
-              <button
-                type="button"
-                key={p}
-                className={`nav-btn ${activePanel === p ? "active" : ""}`}
-                onClick={() => {
-                  setActivePanel(p);
-                  setMobileNavOpen(false);
+            <div>
+              <div
+                className="font-bebas"
+                style={{
+                  fontSize: "clamp(16px,2.5vw,22px)",
+                  letterSpacing: "2px",
+                  lineHeight: 1.1,
                 }}
               >
-                {PANEL_LABELS[p]}
-              </button>
-            ))}
-          </nav>
-          <button
-            type="button"
-            className="theme-toggle"
-            onClick={() => setTheme((t) => (t === "dark" ? "light" : "dark"))}
-            title="Toggle light/dark mode"
-            data-ocid="theme.toggle"
+                KARAN <span style={{ color: "var(--accent2)" }}>PRABHAT</span> —
+                THE GATE ASPIRANT’S TRACKER
+              </div>
+              <div
+                style={{
+                  fontSize: "12px",
+                  color: "var(--gold)",
+                  letterSpacing: "3px",
+                  marginTop: "2px",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "6px",
+                }}
+              >
+                <span style={{ fontSize: "8px" }}>◆</span> TARGET : IITB / IISc
+              </div>
+            </div>
+            <button
+              type="button"
+              className="theme-toggle"
+              onClick={() => setTheme((t) => (t === "dark" ? "light" : "dark"))}
+              title="Toggle light/dark mode"
+              data-ocid="theme.toggle"
+            >
+              {theme === "dark" ? "☀️" : "🌙"}
+            </button>
+          </div>
+
+          {/* Row 2: scrollable nav */}
+          <div
+            className="nav-scroll-container"
+            style={{
+              overflowX: "auto",
+              scrollbarWidth: "none",
+              WebkitOverflowScrolling: "touch",
+            }}
           >
-            {theme === "dark" ? "☀️" : "🌙"}
-          </button>
+            <nav
+              style={{
+                display: "flex",
+                gap: "2px",
+                background: "var(--bg3)",
+                padding: "4px",
+                borderRadius: "10px",
+                border: "1px solid var(--border)",
+                width: "max-content",
+              }}
+            >
+              {PANELS.map((p) => (
+                <button
+                  type="button"
+                  key={p}
+                  className={`nav-btn ${activePanel === p ? "active" : ""}`}
+                  onClick={() => {
+                    setActivePanel(p);
+                    setMobileNavOpen(false);
+                  }}
+                >
+                  {PANEL_LABELS[p]}
+                </button>
+              ))}
+            </nav>
+          </div>
         </div>
       </header>
 

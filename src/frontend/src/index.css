@@ -61,9 +61,23 @@
   margin: 0;
   padding: 0;
 }
+
+html,
+body {
+  width: 100%;
+  max-width: 100%;
+}
+
 html {
   scroll-behavior: smooth;
 }
+
+#root {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
 body {
   font-family: "Inter", sans-serif;
   font-size: 16px;
@@ -466,6 +480,9 @@ body::after {
   cursor: pointer;
   transition: border-color 0.15s, background 0.15s;
   position: relative;
+  box-sizing: border-box;
+  overflow: hidden;
+  word-break: break-word;
 }
 .cal-cell:hover {
   border-color: var(--border2);
@@ -512,7 +529,9 @@ button:hover:not(:disabled) {
   opacity: 0.88;
 }
 
-/* Responsive */
+/* =============================================
+   RESPONSIVE — MOBILE OVERRIDES
+   ============================================= */
 @media (max-width: 768px) {
   .week-grid-responsive {
     grid-template-columns: 1fr !important;
@@ -528,5 +547,117 @@ button:hover:not(:disabled) {
   }
   .today-main-responsive {
     grid-template-columns: 1fr !important;
+  }
+
+  /* Hide scrollbar on nav scroll container */
+  .nav-scroll-container::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* ---- Full-width layout fix ---- */
+  /* Ensure the root app wrapper fills the viewport */
+  #root > div,
+  #root > div > * {
+    max-width: 100vw !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Header: reduce side padding on mobile */
+  header {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Header inner max-width container must also fill width */
+  header > div {
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+
+  /* Clock / hero bar */
+  .hero-glass {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  .hero-glass > div {
+    max-width: 100% !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Quote bar (direct child of root wrapper after hero-glass) */
+  header ~ div {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Main content area */
+  main {
+    padding: 12px 10px !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  /* ---- Calendar grid ---- */
+  .cal-cell {
+    min-height: 52px !important;
+    padding: 3px !important;
+    border-radius: 5px !important;
+  }
+
+  /* Tighten calendar grid gap on mobile */
+  .cal-grid-mobile {
+    gap: 2px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+  }
+
+  .cal-grid-mobile button.cal-cell {
+    font-size: 11px;
+  }
+
+  .cal-lec {
+    font-size: 7px !important;
+  }
+
+  /* Smaller nav buttons on very small screens */
+  .nav-btn {
+    padding: 6px 10px !important;
+    font-size: 11px !important;
+  }
+
+  /* Clock bar inner layout: stack vertically on tiny screens */
+  .hero-glass > div > div {
+    flex-wrap: wrap;
+  }
+}
+
+/* Extra-small screens (phones under 400px) */
+@media (max-width: 400px) {
+  .cal-cell {
+    min-height: 42px !important;
+    padding: 2px !important;
+    border-radius: 4px !important;
+  }
+
+  header {
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+  }
+
+  main {
+    padding: 8px !important;
+  }
+
+  .hero-glass {
+    padding-left: 8px !important;
+    padding-right: 8px !important;
   }
 }
