@@ -63,7 +63,11 @@ export function useGateState(actor: backendInterface | null) {
     (next: GateState) => {
       stateRef.current = next;
       setState(next);
-      actor?.setState(JSON.stringify(next));
+      if (actor) {
+        actor.setState(JSON.stringify(next)).catch((err) => {
+          console.error("Failed to save progress to backend:", err);
+        });
+      }
     },
     [actor],
   );

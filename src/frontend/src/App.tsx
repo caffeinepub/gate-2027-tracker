@@ -2479,7 +2479,7 @@ export default function App() {
   const now = useClock();
   const { identity, login, isInitializing, isLoggingIn } =
     useInternetIdentity();
-  const { actor } = useActor();
+  const { actor, isFetching: isActorFetching } = useActor();
   const {
     state,
     isLoading,
@@ -2551,7 +2551,7 @@ export default function App() {
   const q = QUOTES[quoteIdx];
 
   // Auth gate
-  if (isInitializing || isLoading) {
+  if (isInitializing || isLoading || (identity && isActorFetching)) {
     return (
       <div
         style={{
